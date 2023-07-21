@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Number Management Service</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: beige;
+        }
+        .container {
+            width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 20px;
+            background-color: teal;
+            margin-top: 15%;
+        }
+        .input-field {
+            margin-bottom: 10px;
+            border-radius: 20px;
+        }
+        .btn-submit {
+            background-color: #08f2e2;
+            color: black;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Number Management Service</h1>
+        <form id="numberForm">
+            <div class="input-field">
+                <label for="url">URL:</label>
+                <input type="text" id="url" name="url" required>
+            </div>
+            <div id="urlContainer"></div>
+            <button type="button" onclick="addUrlField()">Add URL</button>
+            <button type="submit" class="btn-submit">Get Numbers</button>
+        </form>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function addUrlField() {
+            var container = document.getElementById('urlContainer');
+            var inputField = document.createElement('div');
+            inputField.classList.add('input-field');
+            inputField.innerHTML = `
+                <label for="url">URL:</label>
+                <input type="text" name="url" required>
+            `;
+            container.appendChild(inputField);
+        }
+
+        document.getElementById('numberForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var form = event.target;
+            var urls = form.querySelectorAll('input[name="url"]');
+            var resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+
+            var numbers = [];
+
+            for (var i = 0; i < urls.length; i++) {
+                var url = urls[i].value.trim();
+                if (url !== '') {
+                    fetch(url)
+                        .then(function(response) {
+                            if (response.ok) {
+                                return response.json();
+                            } else {
+                                throw new Error('Network response was not OK');
+                            }
+                        })
+                        .then(function(data) {
+                            if ('numbers' in data) {
+                                numbers = numbers.concat(data.numbers);
+                            }
+                        })
+                        .catch(function(error) {
+                            console.error('Error:', error);
+                        });
+                }
+            }
+            setTimeout(function() {
+                var result = document.createElement('p');
+                result.textContent = 'Numbers: ' + numbers.join(', ');
+                resultDiv.appendChild(result);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
