@@ -8,6 +8,41 @@ import DataDisplay from './components/DataDisplay/DataDisplay';
 
 const API = 'https://rata.digitraffic.fi/api/v1/';
 
+async function registerUser(){
+  const API_ENDPOINT='http://20.244.56.144/train/register';
+  const requestData = {
+    "companyName":"KIIT",
+    "ownerName": "Manash",
+    "rollNo":"20051731",
+    "ownerEmail":"20051731@kiit.ac.in",
+    "accessCode":"oJnNPG"
+  };
+
+  const requestOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json' // Assuming the API accepts JSON data
+    },
+    body: JSON.stringify(requestData)
+  };
+
+  try {
+    const response = await fetch(API_ENDPOINT, requestOptions);
+    const responseData = await response.json();
+
+    if (response.ok) {
+      console.log('User registered successfully!');
+      console.log(responseData);
+    } else {
+      console.error('Registration failed. Error message:', responseData.error);
+    }
+  } catch (error) {
+    console.error('An error occurred while registering the user:', error.message);
+  }
+}
+
+
+
 class App extends Component {
   constructor(props) {
     super(props);

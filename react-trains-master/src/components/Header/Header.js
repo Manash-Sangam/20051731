@@ -5,16 +5,10 @@ import styles from './Header.module.css';
 const Header = props => {
   const { t, i18n } = useTranslation();
   const language = i18n.language;
-  const toSwitch = language === 'fi' ? 'en' : 'fi';
+  const toSwitch = language === 'en'?'fi':'en';
   return (
     <div className={styles.Header}>
       <div className={styles.title}>{t('title')}</div>
-      <div
-        className={styles.languageSwitcher}
-        onClick={() => i18n.changeLanguage(toSwitch)}
-      >
-        {toSwitch.toUpperCase()}
-      </div>
     </div>
   );
 };
